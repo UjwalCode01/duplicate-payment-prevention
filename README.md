@@ -9,12 +9,6 @@ A production-ready Full-Stack AI-integrated transaction safety system designed t
 
 ---
 
-## ✨ System Screenshot
-*(Is line ke theek niche click karo aur apna Screenshot `Ctrl + V` se paste kar do)*
-
-
----
-
 ## 💻 Tech Stack
 * **Backend:** Python, FastAPI, Uvicorn, SQLite3
 * **Frontend:** HTML5, CSS3, JavaScript
