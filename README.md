@@ -5,7 +5,7 @@ A production-ready Full-Stack AI-integrated transaction safety system designed t
 ---
 
 ## 🚀 Live Demo
-🌐 **Deployment Link:** [https://duplicate-payment-prevention-1.onrender.com].
+🌐 **Deployment Link:** [http://127.0.0.1:5500/index.html].
 
 ---
 
