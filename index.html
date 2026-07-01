@@ -3,113 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Portal</title>
+    <title>Duplicate Payment Prevention System</title>
     <style>
+        :root {
+            --bg-color: #090a0f;
+            --card-bg: #131520;
+            --text-white: #ffffff;
+            --text-muted: #8a8d9e;
+            --accent-blue: #2563eb;
+            --border-color: #1e202e;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #111827;
-            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            margin: 0;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
-            margin: 0;
+            gap: 40px;
         }
+
         .container {
             width: 100%;
-            max-width: 400px;
-            background-color: #1f2937;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            max-width: 500px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
         }
+
         h2, h3 {
-            color: #60a5fa;
             text-align: center;
             margin-top: 0;
+            margin-bottom: 25px;
         }
-        .form-group {
-            margin-bottom: 16px;
+
+        h2 {
+            color: #3b82f6;
         }
+
         label {
             display: block;
-            font-size: 14px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            font-weight: 500;
         }
+
         input {
-            width: 93%;
-            padding: 10px;
-            background-color: #374151;
-            border: 1px solid #4b5563;
-            border-radius: 4px;
-            color: white;
-            outline: none;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            border-radius: 8px;
+            box-sizing: border-box;
         }
-        input:focus {
-            border-color: #3b82f6;
-        }
+
         button {
             width: 100%;
-            padding: 12px;
-            background-color: #2563eb;
+            padding: 14px;
+            background: var(--accent-blue);
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: bold;
         }
-        button:hover {
-            background-color: #1d4ed8;
-        }
+
         #responseMessage {
-            margin-top: 16px;
+            margin-top: 20px;
             padding: 12px;
-            border-radius: 4px;
+            border-radius: 8px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 600;
             display: none;
         }
-        .success-msg {
-            background-color: #064e3b;
-            color: #a7f3d0;
-            display: block !important;
-        }
-        .error-msg {
-            background-color: #7f1d1d;
-            color: #fca5a5;
-            display: block !important;
-        }
+
         .history-container {
             width: 100%;
-            max-width: 650px;
-            background-color: #1f2937;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            margin-top: 32px;
+            max-width: 800px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            text-align: left;
-            margin-top: 12px;
         }
+
         th, td {
-            padding: 12px;
-            border-bottom: 1px solid #374151;
+            padding: 14px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
         }
+
         th {
-            background-color: #374151;
-            color: #f3f4f6;
+            color: var(--text-muted);
         }
-        .status-badge {
-            background-color: #064e3b;
-            color: #a7f3d0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
+
+        .status-success {
+            color: #22c55e;
+        }
+
+        .status-failed {
+            color: #ef4444;
         }
     </style>
 </head>
@@ -118,18 +122,15 @@
     <div class="container">
         <h2>Process Payment</h2>
         <form id="paymentForm">
-            <div class="form-group">
-                <label>User ID</label>
-                <input type="text" id="userId" required>
-            </div>
-            <div class="form-group">
-                <label>Amount ($)</label>
-                <input type="number" id="amount" required>
-            </div>
-            <div class="form-group">
-                <label>Vendor ID</label>
-                <input type="text" id="vendorId" required>
-            </div>
+            <label for="userId">User ID</label>
+            <input type="text" id="userId" required>
+
+            <label for="amount">Amount ($)</label>
+            <input type="number" id="amount" required>
+
+            <label for="vendorId">Vendor ID</label>
+            <input type="text" id="vendorId" required>
+
             <button type="submit">Submit Payment</button>
         </form>
         <div id="responseMessage"></div>
@@ -137,60 +138,61 @@
 
     <div class="history-container">
         <h3>Transaction History</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>User ID</th>
-                    <th>Vendor ID</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="transactionTableBody"></tbody>
-        </table>
+        <div style="overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>User ID</th>
+                        <th>Vendor ID</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTableBody">
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        // Directly using the backend server IP to avoid origin conflicts
-        const API_URL = "http://127.0.0.1:8000";
+        const API_URL = "https://duplicate-payment-prevention-1.onrender.com";
 
         async function fetchTransactions() {
+            const tableBody = document.getElementById("transactionTableBody");
             try {
                 const response = await fetch(API_URL + "/transactions");
-                if (!response.ok) return;
-                const data = await response.json();
-                const tbody = document.getElementById("transactionTableBody");
-                tbody.innerHTML = "";
-                
-                data.reverse().forEach(tx => {
-                    const row = document.createElement("tr");
-                    const timeFormatted = new Date(tx.timestamp).toLocaleTimeString();
-
-                    row.innerHTML = `
-                        <td>${timeFormatted}</td>
-                        <td>${tx.user_id}</td>
-                        <td>${tx.vendor_id}</td>
-                        <td>$${tx.amount}</td>
-                        <td><span class="status-badge">${tx.status}</span></td>
-                    `;
-                    tbody.appendChild(row);
-                });
+                if (response.ok) {
+                    const data = await response.json();
+                    tableBody.innerHTML = data.map(tx => `
+                        <tr>
+                            <td>${tx.time || 'N/A'}</td>
+                            <td>${tx.user_id}</td>
+                            <td>${tx.vendor_id}</td>
+                            <td>$${tx.amount}</td>
+                            <td><span class="${tx.status === 'success' ? 'status-success' : 'status-failed'}">${tx.status}</span></td>
+                        </tr>
+                    `).join('');
+                }
             } catch (err) {
-                console.error("Error fetching transactions:", err);
+                console.error(err);
             }
         }
 
         document.getElementById("paymentForm").addEventListener("submit", async (e) => {
             e.preventDefault();
-            console.log("Form submit button clicked!"); // Check if this shows in console
-            
             const msgBox = document.getElementById("responseMessage");
+            
             const payload = {
                 user_id: document.getElementById("userId").value,
                 amount: parseFloat(document.getElementById("amount").value),
                 vendor_id: document.getElementById("vendorId").value
             };
+
+            msgBox.style.display = "block";
+            msgBox.style.background = "#1e202e";
+            msgBox.style.color = "white";
+            msgBox.textContent = "Processing...";
 
             try {
                 const response = await fetch(API_URL + "/process-payment", {
@@ -200,25 +202,25 @@
                 });
 
                 const result = await response.json();
-                msgBox.className = ""; 
 
                 if (response.ok) {
-                    msgBox.textContent = result.message;
-                    msgBox.classList.add("success-msg");
+                    msgBox.style.background = "rgba(34, 197, 94, 0.1)";
+                    msgBox.style.color = "#22c55e";
+                    msgBox.textContent = result.message || "Payment Successful!";
                     fetchTransactions();
                 } else {
-                    msgBox.textContent = result.detail;
-                    msgBox.classList.add("error-msg");
+                    msgBox.style.background = "rgba(239, 68, 68, 0.1)";
+                    msgBox.style.color = "#ef4444";
+                    msgBox.textContent = result.detail || "Transaction Failed!";
                 }
             } catch (err) {
-                console.error("Fetch Error:", err);
+                console.error(err);
+                msgBox.style.background = "rgba(239, 68, 68, 0.2)";
+                msgBox.style.color = "#ef4444";
                 msgBox.textContent = "Server Connection Error!";
-                msgBox.className = "";
-                msgBox.classList.add("error-msg");
             }
         });
 
-        // Initial call
         fetchTransactions();
     </script>
 </body>
